@@ -9,3 +9,8 @@ x=1+3
 
 # Multiplication function
 
+
+# Division
+
+
+#Percentage
