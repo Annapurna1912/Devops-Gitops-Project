@@ -19,7 +19,7 @@ pipeline {
       stage('Install Dependencies') {
         steps {
           dir('app') {
-            sh'npm ci'
+            sh "npm ci"
      }
    }
 }
@@ -27,9 +27,8 @@ pipeline {
     stage('Docker Build') {
       steps {
         dir('app') {
-          sh'docker build -t ${DOCKER_IMAGE}:${BUILD_NUMBER} -t ${DOCKER_IMAGE}:latest .'
+          sh "docker build -t ${DOCKER_IMAGE}:${BUILD_NUMBER} -t ${DOCKER_IMAGE}:latest ."
 
-          annapurna1993/devops-gitops-app:7 annapurna1993/devops-gitops-app:latest 
     
      }
    }
