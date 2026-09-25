@@ -27,9 +27,9 @@ pipeline {
     stage('Docker Build') {
       steps {
         dir('app') {
-          sh'docker build -t ${DOCKER_IMAGE}:${BUILD_NUMBER} .'
+          sh'docker build -t ${DOCKER_IMAGE}:${BUILD_NUMBER} -t ${DOCKER_IMAGE}:latest .'
 
-          sh 'dockertag ${DOCKER_IMAGE}:${BUILD_NUMBER} ${DOCKER_IMAGE}:latest' 
+          annapurna1993/devops-gitops-app:7 annapurna1993/devops-gitops-app:latest 
     
      }
    }
