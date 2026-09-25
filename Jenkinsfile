@@ -4,6 +4,7 @@ pipeline {
 
      environment {
         PATH = "/home/rajan_kumar_gautam/.nvm/versions/node/v20.20.2/bin:${env.PATH}"
+          DOCKER_IMAGE = "annapurna1993/devops-gitops-app"
      } 
 
      stages {
@@ -18,29 +19,41 @@ pipeline {
       stage('Install Dependencies') {
         steps {
           dir('app') {
-            sh'npm install'
+            sh'npm ci'
      }
    }
 }
 
-    stage('Docker Test') {
+    stage('Docker Build') {
       steps {
-        sh'docker images devops-gitops-app:jenkins'
+        dir('app') {
+          sh'docker build -t ${DOCKER_IMAGE}:${BUILD_NUMBER} .'
+
+          sh 'dockertag ${DOCKER_IMAGE}:${BUILD_NUMBER} ${DOCKER_IMAGE}:latest' 
     
      }
    }
 }
 
-
-  post {
-   success {
-    echo 'Pipeline completed successfully!'
-   }
-
-
-   failure {
-    echo 'Pipeline failed. Check the console output.'
-
+    stage('Docker Push') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+            sh 'echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin'
+              docker push ${DOCKER_IMAGE}:${BUILD_NUMBER}
+              docker push ${DOCKER_IMAGE}:latest
+                    docker logout
+                    
+          }
+        }
       }
-    }
-}
+     }
+
+       post {
+        success {
+          echo 'Pipeline completed successfully.'
+        }
+        failure {
+          echo 'Pipeline failed. Check the console output.'
+       }
+       }
+}  
