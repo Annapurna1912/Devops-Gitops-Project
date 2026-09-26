@@ -45,7 +45,7 @@ pipeline {
           }
         }
       }
-     }
+
        stage('Deploy to Kubernetes') {
     steps {
         withCredentials([file(
