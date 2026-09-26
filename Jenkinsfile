@@ -46,7 +46,27 @@ pipeline {
         }
       }
      }
+       stage('Deploy to Kubernetes') {
+    steps {
+        withCredentials([file(
+            credentialsId: 'jenkins-kubeconfig',
+            variable: 'KUBECONFIG'
+        )]) {
+            sh '''
+                kubectl apply -f k8s/deployment.yaml
+                kubectl apply -f k8s/service.yaml
 
+                kubectl set image deployment/devops-gitops-app \
+                  devops-gitops-app=${DOCKER_IMAGE}:${BUILD_NUMBER}
+
+                kubectl rollout status deployment/devops-gitops-app --timeout=120s
+
+                kubectl get pods
+                kubectl get svc
+            '''
+        }
+    }
+}
        post {
         success {
           echo 'Pipeline completed successfully.'
