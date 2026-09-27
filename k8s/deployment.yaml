@@ -23,6 +23,12 @@ spec:
                   name: devops-gitops-config
                   key: APP_ENV
 
+            - name: APP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: devops-gitops-secret
+                  key: APP_SECRET
+
           ports:
             - containerPort: 3000
 
