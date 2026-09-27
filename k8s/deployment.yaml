@@ -15,6 +15,14 @@ spec:
       containers:
         - name: devops-gitops-app
           image: annapurna1993/devops-gitops-app:latest
+
+          env:
+            - name: APP_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: devops-gitops-config
+                  key: APP_ENV
+
           ports:
             - containerPort: 3000
 
