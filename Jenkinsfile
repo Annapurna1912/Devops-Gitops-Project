@@ -55,6 +55,8 @@ pipeline {
             sh '''
                 kubectl apply -f k8s/deployment.yaml
                 kubectl apply -f k8s/service.yaml
+                kubectl apply -f k8s/gateway/gateway.yaml
+                kubectl apply -f k8s/gateway/httproute.yaml
 
                 kubectl set image deployment/devops-gitops-app \
                   devops-gitops-app=${DOCKER_IMAGE}:${BUILD_NUMBER}
